@@ -3,16 +3,20 @@ import { Form, Input, Checkbox, Button } from "antd";
 
 import AppLayout from "../components/AppLayout";
 import useInput from "../hooks/useInput";
+import { useDispatch, useSelector } from "react-redux";
+import { SIGN_UP_REQUEST } from "../reducers/user";
 
 const Signup = () => {
+  const dispatch = useDispatch();
+  const { signUpLoading } = useSelector((state) => state.user);
+
+  const [email, onChangeEmail] = useInput("");
+  const [nick, onChangeNick] = useInput("");
+  const [password, onChangePassword] = useInput("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [term, setTerm] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [termError, setTermError] = useState(false);
-
-  const [id, onChangeId] = useInput("");
-  const [nick, onChangeNick] = useInput("");
-  const [password, onChangePassword] = useInput("");
 
   const onSubmit = useCallback(() => {
     if (password !== passwordCheck) {
@@ -21,8 +25,12 @@ const Signup = () => {
     if (!term) {
       return setTermError(true);
     }
-    console.log(id, nick, password);
-  }, [password, passwordCheck, term]);
+
+    dispatch({
+      type: SIGN_UP_REQUEST,
+      data: { email, password, nick },
+    });
+  }, [email, password, nick, passwordCheck, term]);
 
   const onChangePasswordCheck = useCallback(
     (e) => {
@@ -41,9 +49,15 @@ const Signup = () => {
     <AppLayout>
       <Form onFinish={onSubmit} style={{ padding: 10 }}>
         <div>
-          <label htmlFor="user-id">아이디</label>
+          <label htmlFor="user-email">이메일</label>
           <br />
-          <Input name="user-id" value={id} required onChange={onChangeId} />
+          <Input
+            name="user-email"
+            type="email"
+            value={email}
+            required
+            onChange={onChangeEmail}
+          />
         </div>
         <div>
           <label htmlFor="user-nick">닉네임</label>
@@ -89,7 +103,7 @@ const Signup = () => {
           )}
         </div>
         <div style={{ marginTop: 10 }}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={signUpLoading}>
             가입하기
           </Button>
         </div>
