@@ -6,7 +6,9 @@ import { addPost } from "../reducers/post";
 
 const PostForm = () => {
   const dispatch = useDispatch();
-  const { addPostDone, imagePaths } = useSelector((state) => state.post);
+  const { addPostLoading, addPostDone, imagePaths } = useSelector(
+    (state) => state.post
+  );
   const [text, onChangeText, setText] = useInput("");
   const imageInput = useRef(null);
 
@@ -17,8 +19,8 @@ const PostForm = () => {
   }, [addPostDone]);
 
   const onSubmit = useCallback(() => {
-    dispatch(addPost(text));
-  }, []);
+    dispatch(addPost({ content: text }));
+  }, [text]);
 
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
@@ -44,7 +46,12 @@ const PostForm = () => {
           ref={imageInput}
         />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
-        <Button type="primary" style={{ float: "right" }} htmlType="submit">
+        <Button
+          type="primary"
+          style={{ float: "right" }}
+          htmlType="submit"
+          loading={addPostLoading}
+        >
           짹짹
         </Button>
       </div>

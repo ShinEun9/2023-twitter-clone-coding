@@ -22,6 +22,9 @@ const PostImages = ({ images }) => {
           src={images[0].src}
           alt={images[0].src}
           onClick={onZoom}
+          style={{
+            objectFit: "cover",
+          }}
         />
         {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
       </>
