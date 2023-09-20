@@ -4,8 +4,17 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": ""
+    "dev": "nodemon app"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.6.1",
+    "sequelize": "^6.33.0",
+    "sequelize-cli": "^6.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
 }
