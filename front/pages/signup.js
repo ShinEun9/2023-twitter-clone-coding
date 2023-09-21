@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import Router from "next/router";
 import { Form, Input, Checkbox, Button } from "antd";
 
 import AppLayout from "../components/AppLayout";
@@ -8,10 +9,30 @@ import { SIGN_UP_REQUEST } from "../reducers/user";
 
 const Signup = () => {
   const dispatch = useDispatch();
-  const { signUpLoading } = useSelector((state) => state.user);
+  const { me, signUpLoading, signUpDone, signUpError } = useSelector(
+    (state) => state.user
+  );
+
+  useEffect(() => {
+    if (!(me && me.id)) {
+      Router.replace("/");
+    }
+  }, [me && me.id]);
+
+  useEffect(() => {
+    if (signUpDone) {
+      Router.replace("/");
+    }
+  }, [signUpDone]);
+
+  useEffect(() => {
+    if (signUpError) {
+      alert(signUpError);
+    }
+  }, [signUpError]);
 
   const [email, onChangeEmail] = useInput("");
-  const [nick, onChangeNick] = useInput("");
+  const [nickname, onChangeNickname] = useInput("");
   const [password, onChangePassword] = useInput("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [term, setTerm] = useState(false);
@@ -28,9 +49,9 @@ const Signup = () => {
 
     dispatch({
       type: SIGN_UP_REQUEST,
-      data: { email, password, nick },
+      data: { email, password, nickname },
     });
-  }, [email, password, nick, passwordCheck, term]);
+  }, [email, password, nickname, passwordCheck, term]);
 
   const onChangePasswordCheck = useCallback(
     (e) => {
@@ -60,13 +81,13 @@ const Signup = () => {
           />
         </div>
         <div>
-          <label htmlFor="user-nick">닉네임</label>
+          <label htmlFor="user-nickname">닉네임</label>
           <br />
           <Input
-            name="user-nick"
-            value={nick}
+            name="user-nickname"
+            value={nickname}
             required
-            onChange={onChangeNick}
+            onChange={onChangeNickname}
           />
         </div>
         <div>

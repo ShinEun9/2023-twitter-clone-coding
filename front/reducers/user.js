@@ -70,19 +70,6 @@ export const logoutRequestAction = () => {
   };
 };
 
-const dummyUser = (data) => ({
-  ...data,
-  nickname: "은구",
-  id: 4,
-  Posts: [],
-  Followings: [
-    { nickname: "nero" },
-    { nickname: "hero" },
-    { nickname: "zero" },
-  ],
-  Followers: [{ nickname: "nero" }, { nickname: "hero" }, { nickname: "zero" }],
-});
-
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
@@ -94,11 +81,11 @@ const reducer = (state = initialState, action) =>
       case LOG_IN_SUCCESS:
         draft.logInLoading = false;
         draft.logInDone = true;
-        draft.me = dummyUser(action.data);
+        draft.me = action.data;
         break;
       case LOG_IN_FAILURE:
         draft.logInLoading = false;
-        draft.logInError = action.error;
+        draft.logInError = action.data;
         break;
       case LOG_OUT_REQUEST:
         draft.logOutLoading = true;
@@ -112,7 +99,7 @@ const reducer = (state = initialState, action) =>
         break;
       case LOG_OUT_FAILURE:
         draft.logOutLoading = false;
-        draft.logOutError = action.error;
+        draft.logOutError = action.data;
         break;
 
       case SIGN_UP_REQUEST:
@@ -125,8 +112,9 @@ const reducer = (state = initialState, action) =>
         draft.signUpDone = true;
         break;
       case SIGN_UP_FAILURE:
+        console.log(action);
         draft.signUpLoading = false;
-        draft.signUpError = action.error;
+        draft.signUpError = action.data;
         break;
       case CHANGE_NICKNAME_REQUEST:
         draft.ChangeNicknameLoading = true;
@@ -139,7 +127,7 @@ const reducer = (state = initialState, action) =>
         break;
       case CHANGE_NICKNAME_FAILURE:
         draft.ChangeNicknameLoading = false;
-        draft.ChangeNicknameError = action.error;
+        draft.ChangeNicknameError = action.data;
         break;
       case ADD_POST_TO_ME:
         // return {
@@ -178,7 +166,7 @@ const reducer = (state = initialState, action) =>
         break;
       case FOLLOW_FAILURE:
         draft.followLoading = false;
-        draft.followError = action.error;
+        draft.followError = action.data;
         break;
       case UNFOLLOW_REQUEST:
         draft.unfollowLoading = true;
@@ -194,7 +182,7 @@ const reducer = (state = initialState, action) =>
         break;
       case UNFOLLOW_FAILURE:
         draft.unfollowLoading = false;
-        draft.unfollowError = action.error;
+        draft.unfollowError = action.data;
       default:
         break;
     }
